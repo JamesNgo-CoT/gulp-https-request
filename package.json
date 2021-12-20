@@ -20,11 +20,12 @@
   "homepage": "https://github.com/JamesNgo-CoT/gulp-https-request#readme",
   "devDependencies": {
     "del": "^6.0.0",
+    "dotenv": "^10.0.0",
     "eslint": "^8.3.0",
     "gulp": "^4.0.2"
   },
   "dependencies": {
     "gulp-string-src": "git+https://github.com/JamesNgo-CoT/gulp-string-src.git#1.0.0",
-    "node-https-request": "git+https://github.com/JamesNgo-CoT/node-https-request.git#1.0.0"
+    "node-https-request": "git+https://github.com/JamesNgo-CoT/node-https-request.git#1.1.0"
   }
 }
