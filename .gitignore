@@ -1,2 +1,6 @@
+# Folder(s)
 dist
 node_modules
+
+# File(s)
+.env

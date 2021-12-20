@@ -1,9 +1,11 @@
-const { dest, series } = require('gulp');
-
 const del = require('del');
+const dotenv = require('dotenv');
+const gulp = require('gulp');
 const gulpStringSrc = require('gulp-string-src');
 
 const gulpHttpsRequest = require('./index');
+
+dotenv.config();
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
@@ -12,29 +14,28 @@ function clean() {
 }
 
 function test1() {
-	return gulpStringSrc('test1.json')
-		.pipe(gulpHttpsRequest.plugin({
-			headers: { 'Accept': 'application/json' },
-			host: 'httpbin.org',
-			method: 'GET',
-			path: '/get'
-		}))
-		.pipe(dest('dist'));
+	return gulpHttpsRequest.pluginSrc('test-2.json', {
+		headers: { 'Accept': 'application/json' },
+		host: process.env.BASE_HOST,
+		method: 'POST',
+		path: process.env.BASE_PATH
+	}, { test: 'test' })
+		.pipe(gulp.dest('dist'));
 }
 
 function test2() {
-	return gulpHttpsRequest.pluginSrc('test2.json', {
-		headers: { 'Accept': 'application/json' },
-		host: 'httpbin.org',
-		method: 'POST',
-		path: '/post'
-	}, {
-		test: 'test'
-	})
-		.pipe(dest('dist'));
+	return gulpStringSrc('test-1.json')
+		.pipe(gulpHttpsRequest.plugin({
+			headers: { 'Accept': 'application/json' },
+			host: process.env.BASE_HOST,
+			method: 'GET',
+			path: process.env.BASE_PATH
+		}))
+		.pipe(gulp.dest('dist'));
 }
 
+const test = gulp.series(test1, test2);
+
 module.exports = {
-	test1: series(clean, test1),
-	test2: series(clean, test2)
+	test: gulp.series(clean, test)
 };
