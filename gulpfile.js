@@ -41,17 +41,21 @@ function test3() {
 			host: process.env.BASE_HOST,
 			method: 'POST',
 			path: process.env.BASE_PATH
-		})) // TODO ADD PAYLOAD
+		}, (file, encoding) => {
+			return JSON.parse(file.contents.toString(encoding));
+		}))
 		.pipe(gulp.dest('dist'));
 }
 
 function test4() {
-	return gulpStringSrc('test-4.json', { test: 'test' })
+	return gulpStringSrc('test-4.json', { test: 'test4' })
 		.pipe(gulpHttpsRequest.dest({
 			headers: { 'Accept': 'application/json' },
 			host: process.env.BASE_HOST,
 			method: 'POST',
 			path: process.env.BASE_PATH
+		}, (file, encoding) => {
+			return JSON.parse(file.contents.toString(encoding));
 		}))
 		.pipe(gulp.dest('dist'));
 }
