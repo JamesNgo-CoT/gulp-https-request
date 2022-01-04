@@ -1,11 +1,10 @@
 {
   "name": "gulp-https-request",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test1": "gulp test1",
-    "test2": "gulp test2"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -26,6 +25,7 @@
   },
   "dependencies": {
     "gulp-string-src": "git+https://github.com/JamesNgo-CoT/gulp-string-src.git#1.0.0",
-    "node-https-request": "git+https://github.com/JamesNgo-CoT/node-https-request.git#1.1.0"
+    "node-https-request": "git+https://github.com/JamesNgo-CoT/node-https-request.git#1.2.0",
+    "vinyl": "^2.2.1"
   }
 }
