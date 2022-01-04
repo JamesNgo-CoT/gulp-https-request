@@ -24,7 +24,7 @@
     "gulp": "^4.0.2"
   },
   "dependencies": {
-    "gulp-string-src": "git+https://github.com/JamesNgo-CoT/gulp-string-src.git#1.0.0",
+    "gulp-string-src": "git+https://github.com/JamesNgo-CoT/gulp-string-src.git#1.2.0",
     "node-https-request": "git+https://github.com/JamesNgo-CoT/node-https-request.git#1.2.0",
     "vinyl": "^2.2.1"
   }

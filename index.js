@@ -12,21 +12,26 @@ class HttpRequestTransform extends stream.Transform {
 	}
 
 	_transform(file, encoding, callback) {
-		const httpsOptions = typeof this.httpsOptions === 'function' ? this.httpsOptions(file, encoding) : this.httpsOptions;
-		const payload = typeof this.payload === 'function' ? this.payload(file, encoding) : this.payload;
-
-		nodeHttpsRequest(httpsOptions, payload).then(({ data }) => {
-			const fileContents = this.fileContentsSetter(data, file, encoding);
-			if (file === fileContents) {
-				// Do nothing.
-			} else if (Vinyl.isVinyl(fileContents)) {
-				file = fileContents;
-			} else if (Buffer.isBuffer(fileContents)) {
-				file.contents = fileContents;
-			} else {
-				file.contents = Buffer.from(JSON.stringify(fileContents), 'utf-8');
-			}
-			callback(null, file);
+		Promise.all([
+			typeof this.httpsOptions === 'function' ? this.httpsOptions(file, encoding) : this.httpsOptions,
+			typeof this.payload === 'function' ? this.payload(file, encoding) : this.payload
+		]).then(([httpsOptions, payload]) => {
+			return nodeHttpsRequest(httpsOptions, payload).then(({ data }) => {
+				return Promise.resolve().then(() => {
+					return this.fileContentsSetter(data, file, encoding);
+				}).then((fileContents) => {
+					if (file === fileContents) {
+						// Do nothing.
+					} else if (Vinyl.isVinyl(fileContents)) {
+						file = fileContents;
+					} else if (Buffer.isBuffer(fileContents)) {
+						file.contents = fileContents;
+					} else {
+						file.contents = Buffer.from(JSON.stringify(fileContents), 'utf-8');
+					}
+					callback(null, file);
+				});
+			});
 		}, (error) => {
 			callback(error, file);
 		});
