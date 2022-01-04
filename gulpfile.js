@@ -50,12 +50,13 @@ function test3() {
 function test4() {
 	return gulpStringSrc('test-4.json', { test: 'test4' })
 		.pipe(gulpHttpsRequest.dest({
-			headers: { 'Accept': 'application/json' },
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
 			host: process.env.BASE_HOST,
 			method: 'POST',
 			path: process.env.BASE_PATH
-		}, (file, encoding) => {
-			return JSON.parse(file.contents.toString(encoding));
 		}))
 		.pipe(gulp.dest('dist'));
 }
