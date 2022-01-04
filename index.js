@@ -18,23 +18,25 @@ class HttpRequestTransform extends stream.Transform {
 		]).then(([httpsOptions, payload]) => {
 			return nodeHttpsRequest(httpsOptions, payload).then(({ data }) => {
 				return Promise.resolve().then(() => {
-					return this.fileContentsSetter(data, file, encoding);
+					if (typeof this.fileContentsSetter === 'function') {
+						return this.fileContentsSetter(data, file, encoding);
+					}
 				}).then((fileContents) => {
-					if (file === fileContents) {
+					if (!fileContents || file === fileContents) {
 						// Do nothing.
 					} else if (Vinyl.isVinyl(fileContents)) {
 						file = fileContents;
 					} else if (Buffer.isBuffer(fileContents)) {
 						file.contents = fileContents;
+					} else if (typeof fileContents === 'string') {
+						file.contents = Buffer.from(fileContents, 'utf-8');
 					} else {
 						file.contents = Buffer.from(JSON.stringify(fileContents), 'utf-8');
 					}
 					callback(null, file);
 				});
 			});
-		}, (error) => {
-			callback(error, file);
-		});
+		}).catch((error) => void callback(error, file));
 	}
 }
 
@@ -71,7 +73,7 @@ function src(fileName, httpsOptions, payload, fileContentsSetter) {
 function dest(
 	httpsOptions,
 	payload = (file, encoding) => file.contents.toString(encoding),
-	fileContentsSetter = (data, file) => file
+	fileContentsSetter
 ) {
 	return new HttpRequestTransform({ objectMode: true }, httpsOptions, payload, fileContentsSetter);
 }

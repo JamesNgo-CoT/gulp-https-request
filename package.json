@@ -1,6 +1,6 @@
 {
   "name": "gulp-https-request",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "gulp-string-src": "git+https://github.com/JamesNgo-CoT/gulp-string-src.git#1.2.0",
-    "node-https-request": "git+https://github.com/JamesNgo-CoT/node-https-request.git#1.2.0",
+    "node-https-request": "git+https://github.com/JamesNgo-CoT/node-https-request.git#1.2.1",
     "vinyl": "^2.2.1"
   }
 }
